@@ -9,12 +9,20 @@ export const ensureRequesterIsAdmMiddleware = async (
 ) => {
   const userRepository = AppDataSource.getRepository(User);
 
+  const idForExecution = req.params.id;
+
   const foundUser = await userRepository.findOneBy({
     id: String(req.requesterId),
   });
 
+  if (!foundUser?.isAdm && foundUser?.id == idForExecution) {
+    return next();
+  }
+
   if (!foundUser?.isAdm) {
-    return res.status(403).json({ message: "Missing admin permissions" });
+    return res.status(403).json({
+      message: "missing admin permissions",
+    });
   }
 
   return next();
