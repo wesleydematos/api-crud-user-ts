@@ -1,8 +1,7 @@
-// import * as express from "express";
-
 declare global {
   namespace Express {
     interface Request {
+      requesterId: number;
       foundUser: object;
     }
   }
