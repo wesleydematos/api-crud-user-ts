@@ -16,7 +16,6 @@ export const createSessionService = async ({ email, password }: IUserLogin) => {
   const userRepository = AppDataSource.getRepository(User);
 
   const foundUser = await userRepository.findOneBy({ email: email });
-  console.log(foundUser);
 
   if (!foundUser) {
     return [403, { message: "User or password invalid!" }];
