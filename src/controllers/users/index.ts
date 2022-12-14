@@ -3,6 +3,7 @@ import createUserService from "../../services/users/createUserService";
 import { IUserRequest } from "../../interfaces/users";
 import { listUsersService } from "../../services/users/listUsersService";
 import { updateUserService } from "../../services/users/updateUserService";
+import { deleteUserService } from "../../services/users/deleteUserService";
 
 const createUserController = async (req: Request, res: Response) => {
   const userData: IUserRequest = req.body;
@@ -22,4 +23,14 @@ const updateUserController = async (req: Request, res: Response) => {
   return res.status(Number(status)).json(data);
 };
 
-export { createUserController, listUsersController, updateUserController };
+const deleteUserController = async (req: Request, res: Response) => {
+  const [status, data] = await deleteUserService(req.params.id);
+  return res.status(Number(status)).json(data);
+};
+
+export {
+  createUserController,
+  listUsersController,
+  updateUserController,
+  deleteUserController,
+};
