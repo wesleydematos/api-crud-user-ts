@@ -6,13 +6,6 @@ import jwt from "jsonwebtoken";
 import "dotenv/config";
 
 export const createSessionService = async ({ email, password }: IUserLogin) => {
-  if (!email) {
-    return [400, { message: "Email is required!" }];
-  }
-  if (!password) {
-    return [400, { message: "Password is required!" }];
-  }
-
   const userRepository = AppDataSource.getRepository(User);
 
   const foundUser = await userRepository.findOneBy({ email: email });
