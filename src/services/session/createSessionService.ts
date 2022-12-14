@@ -27,7 +27,7 @@ export const createSessionService = async ({ email, password }: IUserLogin) => {
     return [403, { message: "User or password invalid!" }];
   }
 
-  const token = jwt.sign({}, process.env.SECRET_KEY!, {
+  const token = jwt.sign({ foundUser: foundUser }, process.env.SECRET_KEY!, {
     subject: String(foundUser.id),
     expiresIn: "24h",
   });

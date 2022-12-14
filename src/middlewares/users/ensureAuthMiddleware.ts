@@ -24,6 +24,7 @@ export const ensureAuthMiddleWare = async (
       });
     }
 
+    req.foundUser = decoded.foundUser;
     req.requesterId = decoded.sub;
 
     return next();
