@@ -1,5 +1,6 @@
 import AppDataSource from "../../data-source";
 import { User } from "../../entities/userEntity";
+import { AppError } from "../../errors/AppError";
 import { IUserRequest } from "../../interfaces/users";
 
 const createUserService = async (userData: IUserRequest) => {
@@ -12,10 +13,10 @@ const createUserService = async (userData: IUserRequest) => {
 
     const { password, ...userWoP } = user;
 
-    return [201, userWoP];
+    return userWoP;
   }
 
-  return [400, { message: "User already exists!" }];
+  throw new AppError("User already exists!");
 };
 
 export default createUserService;

@@ -4,6 +4,7 @@ import { User } from "../../entities/userEntity";
 import { IUserLogin } from "../../interfaces/users";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
+import { AppError } from "../../errors/AppError";
 
 export const createSessionService = async ({ email, password }: IUserLogin) => {
   const userRepository = AppDataSource.getRepository(User);
@@ -11,13 +12,13 @@ export const createSessionService = async ({ email, password }: IUserLogin) => {
   const foundUser = await userRepository.findOneBy({ email: email });
 
   if (!foundUser) {
-    return [403, { message: "User or password invalid!" }];
+    throw new AppError("User or password invalid!", 403);
   }
 
   const passwordMatch = await compare(password, foundUser.password);
 
   if (!passwordMatch) {
-    return [403, { message: "User or password invalid!" }];
+    throw new AppError("User or password invalid!", 403);
   }
 
   const token = jwt.sign({ foundUser: foundUser }, process.env.SECRET_KEY!, {
@@ -25,5 +26,5 @@ export const createSessionService = async ({ email, password }: IUserLogin) => {
     expiresIn: "24h",
   });
 
-  return [200, { token: token }];
+  return { token: token };
 };

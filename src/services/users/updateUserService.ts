@@ -1,5 +1,6 @@
 import AppDataSource from "../../data-source";
 import { User } from "../../entities/userEntity";
+import { AppError } from "../../errors/AppError";
 import { IUserUpdate } from "../../interfaces/users";
 
 export const updateUserService = async (id: string, body: IUserUpdate) => {
@@ -10,7 +11,7 @@ export const updateUserService = async (id: string, body: IUserUpdate) => {
     bodyKeys.includes("isActive") ||
     bodyKeys.includes("id")
   ) {
-    return [401, { message: "Can`t update those fields" }];
+    throw new AppError("Can`t update those fields", 401);
   }
 
   const userRepository = AppDataSource.getRepository(User);
@@ -18,12 +19,12 @@ export const updateUserService = async (id: string, body: IUserUpdate) => {
   const user = await userRepository.findOneBy({ id: id });
 
   if (!user) {
-    return [404, { message: "User don't exists" }];
+    throw new AppError("User don't exists", 404);
   }
-  //adicionar hash na senha
+
   userRepository.update(user.id, { ...body });
 
   const { password, ...userWoP } = user;
 
-  return [200, userWoP];
+  return userWoP;
 };
