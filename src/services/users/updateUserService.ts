@@ -3,7 +3,7 @@ import { User } from "../../entities/userEntity";
 import { AppError } from "../../errors/AppError";
 import { IUserUpdate } from "../../interfaces/users";
 
-export const updateUserService = async (id: string, body: IUserUpdate) => {
+export const updateUserService = async (userId: string, body: IUserUpdate) => {
   const bodyKeys = Object.keys(body);
 
   if (
@@ -16,7 +16,7 @@ export const updateUserService = async (id: string, body: IUserUpdate) => {
 
   const userRepository = AppDataSource.getRepository(User);
 
-  const user = await userRepository.findOneBy({ id: id });
+  const user = await userRepository.findOneBy({ id: userId });
 
   if (!user) {
     throw new AppError("User don't exists", 404);
